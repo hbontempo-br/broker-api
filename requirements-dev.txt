@@ -1,0 +1,4 @@
+coverage
+pre-commit==2.8.2
+pytest==6.1.2
+testfixtures==6.15.0
