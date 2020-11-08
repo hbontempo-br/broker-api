@@ -3,7 +3,7 @@
 
 ## API endpoints
 
-This API's uses the OpenApi 3.0 standard for it's documentation. You can access it through a ~~[Redocs's page]()~~ or, if you prefer, directly through it's ~~yaml [file]()~~. 
+This API's uses the OpenApi 3.0 standard for it's documentation. You can access it through a [Redocs's page](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/hbontempo-br/broker-api/master/documentation/schema.yaml) or, if you prefer, directly through it's yaml [file](documentation/schema.yaml). 
 
 ## API Install Guide
 
@@ -37,12 +37,14 @@ This project requires this environment variables:
 
 | Variable | Definition | Example | Default |
 | - | - | - | - |
-| DB_ADDRESS | The address of application MongoDB's cluster | cluster0-2ai50.gcp.mongodb.net | |
-| DB_DATABASE | Name of the database that the data is registered | - | registration_validator |
-| DB_USER | Application's MongoDB user | CoolUser | |
-| DB_PASSWORD | Application's MongoDB password | CoolPassword | |
-| GUNICORN_WORKER_TIMEOUT | Number of gunicorn workers that you want | 2 | 1 |
+| GUNICORN_WORKERS | Number of gunicorn workers that you want | 2 | 1 |
+| GUNICORN_WORKER_TIMEOUT | Configured timeout (in seconds)| 60 | - |
 | COMMIT | The commit of this you running application (for better debbuging) | ca82a6dff817ec66f44342007202690a93763949 | None |
+| DB_USER | Application's MySQL user | broker_api_user | - |
+| DB_PASSWORD | Application's MySQL password | broker_api_password | - |
+| DB_ADDRESS | Application's MySQL address | 172.0.0.1 | - |
+| DB_PORT | Application's MySQL port | 3306 | 3306 |
+| DB_DATABASE | Application's MySQL schema name | broker | broker |
 
 
 
@@ -102,7 +104,7 @@ $ pip3 install -r requirements-dev.txt
 Run pytest:
 
 ```sh
-$ pytest test
+$ pytest test --validate-envvars
 ```
 
 

@@ -82,3 +82,26 @@ class TestBaseResource(unittest.TestCase):
         self.assertEqual(response.status, falcon.HTTP_OK)
         self.assertEqual(response.media, body_dict)
         self.assertEqual(headers, headers)
+
+    def test_new_paginated_response(self):
+        returned_items = [{"test": "ok"}]
+        page = 1
+        rows_per_page = 10
+        total_count = 1
+        expected_response = {
+            "data": returned_items,
+            "pagination": {
+                "current_page": page,
+                "next_page": None,
+                "rows_per_page": rows_per_page,
+                "total_pages": 1,
+                "total_rows": total_count,
+            },
+        }
+        actual_response = self.base_resource.new_paginated_response(
+            returned_items=returned_items,
+            page=page,
+            rows_per_page=rows_per_page,
+            total_count=total_count,
+        )
+        self.assertDictEqual(actual_response, expected_response)

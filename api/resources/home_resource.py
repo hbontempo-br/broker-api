@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from falcon import Request, Response
 
 
-class Home(BaseResource):
+class HomeResource(BaseResource):
     @request_error_handler
     def on_get(self, req: Request, res: Response) -> NoReturn:
         self.generate_response(

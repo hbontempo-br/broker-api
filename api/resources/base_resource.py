@@ -38,3 +38,18 @@ class BaseResource:
         res.status = get_http_status(status_code=status_code)
         res.media = body_dict
         res.set_headers(headers=headers)
+
+    @staticmethod
+    def new_paginated_response(returned_items, page, rows_per_page, total_count):
+        total_pages = -(-total_count // rows_per_page)
+        response = {
+            "data": returned_items,
+            "pagination": {
+                "current_page": page,
+                "next_page": None if page >= total_pages else page + 1,
+                "rows_per_page": rows_per_page,
+                "total_pages": total_pages,
+                "total_rows": total_count,
+            },
+        }
+        return response

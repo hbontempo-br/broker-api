@@ -1,0 +1,317 @@
+# TODO: Add headers
+
+
+openapi: 3.0.0
+info:
+  title: Broker API
+  version: 1.0.0
+  contact:
+    name: Henrique Bontempo
+    email: me@hbontempo.dev
+tags:
+  - name: User
+    description: Endpoints regarding User management
+  - name: Wallet
+    description: Endpoints regarding Wallet management
+  - name: Transfer
+    description: Endpoints regarding Transfer managment
+  - name: Asset
+    description: Endpoints regarding Asset managment
+servers:
+  - url: https:broker-api.hbontempo.dev
+
+#################
+####  PATHS  ####
+#################
+paths:
+
+
+  ##### -> CLIENT INTEGRATION
+
+  /user:
+
+    ### CREATE ###
+    post:
+      tags:
+        - User
+      summary: New User
+      description: "This endpoint is used for the registration of a new User"
+      requestBody:
+        $ref: '#/components/requestBodies/User'
+      responses:
+        "200":
+          $ref: '#/components/responses/User'
+        # "400":
+        #   $ref: '#/components/responses/BadRequest'
+
+    ### GET PAGINATED LIST ###
+    get:
+      tags:
+        - User
+      summary: Retrieve paginated list of User
+      description: "This endpoint is used for retrieving a paginated list of Users"
+      parameters:
+        - $ref: '#/components/parameters/query_user_name'
+        - $ref: '#/components/parameters/query_user_document'
+        - $ref: '#/components/parameters/query_user_email'
+        - $ref: '#/components/parameters/query_page'
+        - $ref: '#/components/parameters/query_page_size'
+      responses:
+        "200":
+          $ref: '#/components/responses/PaginatedUser'
+
+  /user/{user_key}:
+
+    ### GET ONE ###
+    get:
+      tags:
+        - User
+      summary: Retrieve one User
+      description: "This endpoint is used for retrieving one Users"
+      parameters:
+        - $ref: '#/components/parameters/path_user_key'
+      responses:
+        "200":
+          $ref: '#/components/responses/User'
+
+    ### DELETE ONE ###
+    delete:
+      tags:
+        - User
+      summary: Delete one User
+      description: "This endpoint is used for deleting one Users"
+      parameters:
+        - $ref: '#/components/parameters/path_user_key'
+      responses:
+        "204":
+          description: The resource was deleted successfully.
+
+
+
+######################
+####  COMPONENTS  ####
+######################
+components:
+
+  ### PARAMETERS ###
+  parameters:
+
+
+    path_user_key:
+      in: path
+      name: user_key
+      required: true
+      schema:
+        $ref: '#/components/schemas/user_key'
+
+    query_user_name:
+      in: query
+      name: name
+      required: false
+      schema:
+        $ref: '#/components/schemas/user_name'
+
+
+    query_user_document:
+      in: query
+      name: document
+      required: false
+      schema:
+        $ref: '#/components/schemas/user_document'
+
+
+    query_user_email:
+      in: query
+      name: email
+      required: false
+      schema:
+        $ref: '#/components/schemas/user_email'
+
+    query_page:
+      in: query
+      name: page
+      required: false
+      schema:
+        $ref: '#/components/schemas/page'
+
+    query_page_size:
+      in: query
+      name: page_size
+      required: false
+      schema:
+        $ref: '#/components/schemas/rows_per_page'
+
+
+
+
+  ### REQUEST BODIES ###
+  requestBodies:
+
+
+    User:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserRequest'
+
+
+
+
+  ### RESPONSES ###
+  responses:
+
+
+    User:
+      description: "Single User"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserSuccessResponse'
+
+    PaginatedUser:
+      description: "Paginated list of Users"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PaginatedUserSuccessResponse'
+
+
+
+
+
+
+  ### SCHEMAS ###
+  schemas:
+
+
+    UserRequest:
+      type: object
+      properties:
+        name:
+          $ref: "#/components/schemas/user_name"
+        document:
+          $ref: "#/components/schemas/user_document"
+        email:
+          $ref: "#/components/schemas/user_email"
+      required:
+        - name
+        - document
+        - email
+      additionalProperties: false
+
+    UserSuccessResponse:
+      type: object
+      properties:
+        name:
+          $ref: "#/components/schemas/user_name"
+        user_key:
+          $ref: "#/components/schemas/user_key"
+        document:
+          $ref: "#/components/schemas/user_document"
+        email:
+          $ref: "#/components/schemas/user_email"
+        balance:
+          $ref: "#/components/schemas/user_balance"
+      required:
+        - name
+        - user_key
+        - document
+        - email
+        - balance
+      additionalProperties: false
+
+    PaginatedUserSuccessResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/UserSuccessResponse"
+        pagination:
+          $ref: "#/components/schemas/pagination"
+      required:
+        - data
+        - pagination
+      additionalProperties: false
+
+
+
+    pagination:
+      type: object
+      properties:
+        current_page:
+          $ref: "#/components/schemas/page"
+        next_page:
+          type: integer
+          example: 2
+          nullable: true
+        rows_per_page:
+          $ref: "#/components/schemas/rows_per_page"
+        total_pages:
+          type: integer
+          nullable: true
+          example: 1
+        total_rows:
+          type: integer
+          nullable: true
+          example: 1
+
+    page:
+      type: integer
+      nullable: true
+      example: 1
+      default: 1
+
+    rows_per_page:
+      type: integer
+      minimum: 0
+      maximum: 100
+      nullable: true
+      example: 10
+      default: 10
+
+    user_key:
+      description: User's identifier key
+      type: string
+      minLength: 36
+      maxLength: 36
+      nullable: false
+      example: "d5e2e124-9634-4225-85a1-6ef6a8381dfc"
+
+    user_name:
+      description: User's name
+      type: string
+      minLength: 0
+      maxLength: 200
+      nullable: false
+      example: "Cool Name"
+
+    user_document:
+      description: User's document
+      type: string
+      minLength: 11
+      maxLength: 14
+      nullable: false
+      example: "74781664000171"
+
+    user_email:
+      description: User's email
+      type: string
+      minLength: 0
+      maxLength: 400
+      nullable: false
+      example: user@email.com
+
+    user_balance:
+      $ref: "#/components/schemas/money"
+
+    money:
+      description: Monetary amount
+      type: number
+      minimum: 0.00
+      multipleOf: 0.01
+      nullable: false
+      example: 6.66
+
+

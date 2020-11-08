@@ -16,3 +16,16 @@ exclude = '''
   | dist
 )/
 '''
+
+[tool.pytest.ini_options]
+pytestenvvars__env_files = 'local.env'
+pytestenvvars__dont_randomize_envvars = '''
+    GUNICORN_WORKERS
+    GUNICORN_WORKER_TIMEOUT
+    COMMIT
+    DB_USER
+    DB_PASSWORD
+    DB_ADDRESS
+    DB_PORT
+    DB_DATABASE
+'''
