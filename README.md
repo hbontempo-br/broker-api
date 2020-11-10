@@ -3,7 +3,7 @@
 
 ## API endpoints
 
-This API's uses the OpenApi 3.0 standard for it's documentation. You can access it through a [Redocs's page](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/hbontempo-br/broker-api/master/documentation/schema.yaml) or, if you prefer, directly through it's yaml [file](documentation/schema.yaml). 
+This API's uses the OpenApi 3.0 standard for it's documentation. You can access it through a [Redocs's page](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/hbontempo-br/broker-api/main/documentation/schema.yaml) or, if you prefer, directly through it's yaml [file](documentation/schema.yaml). 
 
 ## API Install Guide
 
